@@ -37,27 +37,27 @@ unsigned char fontset[80] =
 //initialise variables
 void init(Chip8 *chip8) {
     //clear memory
-    for(int i = 0; i < 4096; i++) {
+    for(int i = 0; i < sizeof(memory); i++) {
         memory[i] = 0;
     }
 
     //load fontset
-    for(int i = 0; i < 80; i++) {
+    for(int i = 0; i < sizeof(fontset); i++) {
         memory[i] = fontset[i];
     }
 
     //clear registers and key map
-    for(int i = 0; i < 16; i++) {
+    for(int i = 0; i < sizeof(keys); i++) {
         V[i] = 0;
         keys[i] = 0;
     }
     I = 0;
 
     //reset pc
-    pc = 512;
+    pc = 512; //the emulator itself was usually stored in the first 512 bytes, so pc starts from there
 
     //clear stack
-    for(int i = 0; i < 48; i++) {
+    for(int i = 0; i < sizeof(stack); i++) {
         stack[i] = 0;
     }
     sp = 0;
@@ -66,7 +66,7 @@ void init(Chip8 *chip8) {
     delay_timer = 0;
 
     //clear display
-    for(int i = 0; i < 2048; i++) {
+    for(int i = 0; i < sizeof(display); i++) {
         display[i] = 0;
     }
 }
@@ -81,7 +81,7 @@ void emulate(Chip8 *chip8) {
         case 0x0000:
             switch (opcode & 0x000F) {
                 case 0x0000: //00E0 clear screen
-                    for(int i = 0; i < 2048; i++) {
+                    for(int i = 0; i < sizeof(display); i++) {
                         display[i] = 0;
                     }
 
@@ -277,7 +277,7 @@ void emulate(Chip8 *chip8) {
 
                 for(int j = 0; j < 8; j++) { //column
                     unsigned char pixel = row & (0x80 >> j);
-                    int index = 64*(y+i)+(x+j);
+                    int index = BOARD_WIDHT*(y+i)+(x+j);
                     
                     if((pixel > 0)) {
                         if(display[index] == 1) {
@@ -332,8 +332,7 @@ void emulate(Chip8 *chip8) {
                     {
                         bool key_pressed = false;
 
-                        for(int i = 0; i < 16; ++i)
-                        {
+                        for(int i = 0; i < sizeof(keys); i++) {
                             if(keys[i] != 0)
                             {
                                 V[(opcode & 0x0F00) >> 8] = i;
@@ -341,9 +340,9 @@ void emulate(Chip8 *chip8) {
                             }
                         }
 
-                        // If no key is pressed, return and try again.
-                        if(!key_pressed)
+                        if(!key_pressed) {
                             return;
+                        }
 
                         pc += 2;
                     }

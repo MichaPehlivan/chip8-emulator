@@ -4,9 +4,6 @@
 #include <unistd.h>
 #include "chip8.h"
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 640;
-
 // Keypad keymap
 uint8_t keymap[16] = {
     SDLK_x,
@@ -74,7 +71,7 @@ int main() {
                     quit = 1;
                 }
 
-                for (int i = 0; i < 16; ++i) {
+                for (int i = 0; i < sizeof(keymap); i++) {
                     if (e.key.keysym.sym == keymap[i]) {
                         chip8.keys[i] = 1;
                     }
@@ -82,7 +79,7 @@ int main() {
             }
 
             if (e.type == SDL_KEYUP) {
-                for (int i = 0; i < 16; ++i) {
+                for (int i = 0; i < sizeof(keymap); i++) {
                     if (e.key.keysym.sym == keymap[i]) {
                         chip8.keys[i] = 0;
                     }
@@ -99,10 +96,10 @@ int main() {
             for(int j = 0; j < 32; j++) {
                 if(chip8.display[i + 64*j]) {
                     SDL_Rect rect;
-                    rect.w = 20;
-                    rect.h = 20;
-                    rect.x = i*20;
-                    rect.y = j*20;
+                    rect.w = PIXEL_SIZE;
+                    rect.h = PIXEL_SIZE;
+                    rect.x = i*PIXEL_SIZE;
+                    rect.y = j*PIXEL_SIZE;
                     SDL_RenderFillRect(renderer, &rect);
                 }
             }

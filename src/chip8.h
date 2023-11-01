@@ -1,5 +1,11 @@
 #include <stdint.h>
 
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 640
+#define PIXEL_SIZE 20
+#define BOARD_WIDHT 64
+#define BOARD_HEIGHT 32
+
 typedef struct {
     uint8_t memory[4096]; //memory
     uint8_t V[16]; //registers V0 to VF
