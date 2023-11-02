@@ -13,6 +13,7 @@
 #define delay_timer chip8->delay_timer
 #define keys chip8->keys
 #define display chip8->display
+#define draw_flag chip8->draw_flag
 
 unsigned char fontset[80] =
 {
@@ -69,6 +70,9 @@ void init(Chip8 *chip8) {
     for(int i = 0; i < sizeof(display); i++) {
         display[i] = 0;
     }
+
+    //reset draw flag
+    draw_flag = 0;
 }
 
 //emulate a single opcode
@@ -76,7 +80,7 @@ void emulate(Chip8 *chip8) {
     int opcode = memory[pc] << 8 | memory[pc + 1];
 
     printf("opcode: %x\n", opcode);
-    
+
     switch (opcode & 0xF000) {
         case 0x0000:
             switch (opcode & 0x000F) {
@@ -85,8 +89,8 @@ void emulate(Chip8 *chip8) {
                         display[i] = 0;
                     }
 
+                    draw_flag = 1;
                     pc += 2;
-
                     break;
 
                 case 0x000E: //00EE //return from subroutine
@@ -288,6 +292,7 @@ void emulate(Chip8 *chip8) {
                 }
             }
 
+            draw_flag = 1;
             pc += 2;
             break;
 

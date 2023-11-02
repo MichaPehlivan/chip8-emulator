@@ -92,21 +92,26 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        for(int i = 0; i < 64; i++) {
-            for(int j = 0; j < 32; j++) {
-                if(chip8.display[i + 64*j]) {
-                    SDL_Rect rect;
-                    rect.w = PIXEL_SIZE;
-                    rect.h = PIXEL_SIZE;
-                    rect.x = i*PIXEL_SIZE;
-                    rect.y = j*PIXEL_SIZE;
-                    SDL_RenderFillRect(renderer, &rect);
+
+        if(chip8.draw_flag) {
+            chip8.draw_flag = 0;
+            
+            for(int i = 0; i < 64; i++) {
+                for(int j = 0; j < 32; j++) {
+                    if(chip8.display[i + 64*j]) {
+                        SDL_Rect rect;
+                        rect.w = PIXEL_SIZE;
+                        rect.h = PIXEL_SIZE;
+                        rect.x = i*PIXEL_SIZE;
+                        rect.y = j*PIXEL_SIZE;
+                        SDL_RenderFillRect(renderer, &rect);
+                    }
                 }
             }
+
+            SDL_RenderPresent(renderer);
         }
 
-        //present and sleep
-        SDL_RenderPresent(renderer);
         usleep(1200);
     }
 

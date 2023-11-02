@@ -20,6 +20,8 @@ typedef struct {
     
     uint8_t keys[16]; //key map
     uint8_t display[2048]; //graphics display
+
+    uint8_t draw_flag; //draw flag
 } Chip8;
 
 //initialise variables
