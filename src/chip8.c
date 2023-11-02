@@ -79,8 +79,6 @@ void init(Chip8 *chip8) {
 void emulate(Chip8 *chip8) {
     int opcode = memory[pc] << 8 | memory[pc + 1];
 
-    printf("opcode: %x\n", opcode);
-
     switch (opcode & 0xF000) {
         case 0x0000:
             switch (opcode & 0x000F) {
