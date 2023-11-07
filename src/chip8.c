@@ -428,6 +428,11 @@ void emulate(Chip8 *chip8) {
 //load a rom into memory
 void load_rom(Chip8 *chip8, const char *path) {
     FILE *rom = fopen(path, "rb");
+    if(rom == NULL) {
+        printf("rom not found!\n");
+        exit(EXIT_FAILURE);
+    }
+
     
     bool EOF_reached = false;
     int memory_index = 512;

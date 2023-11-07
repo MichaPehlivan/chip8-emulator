@@ -29,14 +29,14 @@ int main(int argc, char* argv[]) {
     char *rom_path;
     if(argc == 1) {
         printf("specify rom path\n");
-        return 1;
+        return EXIT_FAILURE;
     }
     else if(argc == 2) {
         rom_path = argv[1];
     }
     else if(argc > 2) {
         printf("too many arguments!\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     Chip8 chip8;
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
     
-    SDL_Window* window = NULL;
+    SDL_Window* window;
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
